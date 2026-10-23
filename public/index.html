@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拾光清单 · 日常事务管理平台</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗓️</text></svg>">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- ========== 登录 / 注册页 ========== -->
+  <section id="auth-view" class="auth-view hidden">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="auth-logo">🗂️</span>
+        <h1>拾光清单</h1>
+        <p>重要 × 紧急 四象限 · 番茄专注 · 让每一天有条理</p>
+      </div>
+      <form id="auth-form" autocomplete="on">
+        <label>用户名
+          <input id="auth-username" name="username" required minlength="2" maxlength="24" placeholder="2-24 位字符">
+        </label>
+        <label>密码
+          <input id="auth-password" name="password" type="password" required minlength="6" maxlength="72" placeholder="至少 6 位">
+        </label>
+        <p id="auth-error" class="form-error" role="alert"></p>
+        <button type="submit" id="auth-submit" class="btn btn-primary btn-block">登 录</button>
+      </form>
+      <p class="auth-switch">
+        <span id="auth-switch-text">还没有账号？</span>
+        <a href="#" id="auth-switch-link">立即注册</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== 主应用 ========== -->
+  <div id="app-view" class="app-layout hidden">
+    <aside class="sidebar">
+      <div class="side-brand"><span>🗂️</span><b>拾光清单</b></div>
+      <nav>
+        <button class="nav-item active" data-view="today">📌 今日焦点</button>
+        <button class="nav-item" data-view="list">📋 任务列表</button>
+        <button class="nav-item" data-view="matrix">🧭 四象限</button>
+        <button class="nav-item" data-view="pomodoro">🍅 番茄专注</button>
+        <button class="nav-item" data-view="stats">📊 数据统计</button>
+      </nav>
+      <div class="side-foot">
+        <div class="user-chip"><span id="side-avatar" class="avatar"></span><span id="side-user"></span></div>
+        <button id="logout-btn" class="btn btn-ghost btn-sm">退出登录</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- 今日焦点 -->
+      <section id="view-today" class="view">
+        <header class="view-head">
+          <div><h2>今日焦点</h2><p id="today-date" class="muted"></p></div>
+          <button class="btn btn-primary" data-action="new-task">＋ 新建任务</button>
+        </header>
+        <div id="today-cards" class="stat-cards"></div>
+        <div id="today-quadrants" class="mini-quadrants"></div>
+        <h3 class="sec-title">今天要做的事</h3>
+        <ul id="today-list" class="task-list"></ul>
+      </section>
+
+      <!-- 任务列表 -->
+      <section id="view-list" class="view hidden">
+        <header class="view-head">
+          <div><h2>任务列表</h2><p class="muted">搜索、筛选、管理你的所有事务</p></div>
+          <button class="btn btn-primary" data-action="new-task">＋ 新建任务</button>
+        </header>
+        <div class="toolbar">
+          <input id="search-input" class="input" type="search" placeholder="🔍 搜索标题或备注…">
+          <select id="filter-status" class="input">
+            <option value="active">未完成</option><option value="all">全部</option>
+            <option value="todo">待办</option><option value="doing">进行中</option><option value="done">已完成</option>
+          </select>
+          <select id="filter-tag" class="input"><option value="">全部标签</option></select>
+        </div>
+        <ul id="list-tasks" class="task-list"></ul>
+        <p id="list-empty" class="empty hidden">这里空空如也，点右上角新建第一个任务吧 ✨</p>
+      </section>
+
+      <!-- 四象限 -->
+      <section id="view-matrix" class="view hidden">
+        <header class="view-head">
+          <div><h2>艾森豪威尔四象限</h2><p class="muted">拖动卡片可在象限间移动，重新评估事务的优先级</p></div>
+        </header>
+        <div class="matrix-grid">
+          <div class="q-col-head q-blank"></div>
+          <div class="q-col-head">紧急</div><div class="q-col-head">不紧急</div>
+          <div class="q-row-head">重要</div>
+          <div class="q-cell" data-quadrant="1"><h4>① 立即去做</h4><p class="muted">危机、截止日期迫近的关键事</p><div class="q-body" id="q1"></div></div>
+          <div class="q-cell" data-quadrant="2"><h4>② 计划去做</h4><p class="muted">学习、锻炼、长期目标——最值得投入</p><div class="q-body" id="q2"></div></div>
+          <div class="q-row-head">不重要</div>
+          <div class="q-cell" data-quadrant="3"><h4>③ 委托/快速处理</h4><p class="muted">打断、杂事，能交给别人就交出去</p><div class="q-body" id="q3"></div></div>
+          <div class="q-cell" data-quadrant="4"><h4>④ 有空再说</h4><p class="muted">消遣、刷手机——控制时间即可</p><div class="q-body" id="q4"></div></div>
+        </div>
+      </section>
+
+      <!-- 番茄专注 -->
+      <section id="view-pomodoro" class="view hidden">
+        <header class="view-head">
+          <div><h2>番茄专注</h2><p class="muted">专注 25 分钟，休息 5 分钟；完成的番茄自动计入统计</p></div>
+        </header>
+        <div class="pomo-wrap">
+          <div class="pomo-card">
+            <div class="pomo-modes">
+              <button class="pomo-mode active" data-mode="focus">专注 25′</button>
+              <button class="pomo-mode" data-mode="short">短休 5′</button>
+              <button class="pomo-mode" data-mode="long">长休 15′</button>
+            </div>
+            <svg class="pomo-ring" viewBox="0 0 200 200">
+              <circle class="ring-bg" cx="100" cy="100" r="88"></circle>
+              <circle class="ring-fg" id="pomo-ring" cx="100" cy="100" r="88"></circle>
+            </svg>
+            <div class="pomo-time" id="pomo-time">25:00</div>
+            <div class="pomo-task">
+              <label class="muted" for="pomo-task-select">本次番茄关联任务（可选）</label>
+              <select id="pomo-task-select" class="input"><option value="">不关联具体任务</option></select>
+            </div>
+            <div class="pomo-btns">
+              <button id="pomo-start" class="btn btn-primary">▶ 开始</button>
+              <button id="pomo-pause" class="btn btn-ghost hidden">⏸ 暂停</button>
+              <button id="pomo-reset" class="btn btn-ghost">↺ 重置</button>
+            </div>
+            <p class="pomo-hint" id="pomo-hint"></p>
+          </div>
+          <div class="pomo-side">
+            <h3 class="sec-title">今日番茄</h3>
+            <div id="pomo-today" class="tomato-dots"></div>
+            <h3 class="sec-title">最近专注记录</h3>
+            <ul id="pomo-history" class="history-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 数据统计 -->
+      <section id="view-stats" class="view hidden">
+        <header class="view-head"><div><h2>数据统计</h2><p class="muted">近 7 天的完成情况与专注时长</p></div></header>
+        <div id="stats-cards" class="stat-cards"></div>
+        <div class="charts">
+          <div class="chart-card"><h3>每日完成任务</h3><canvas id="chart-done" width="560" height="240"></canvas></div>
+          <div class="chart-card"><h3>每日专注分钟</h3><canvas id="chart-focus" width="560" height="240"></canvas></div>
+          <div class="chart-card"><h3>未完成任务的象限分布</h3><canvas id="chart-quadrant" width="560" height="240"></canvas></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========== 任务编辑弹窗 ========== -->
+  <dialog id="task-modal" class="modal">
+    <form id="task-form" method="dialog">
+      <h3 id="task-modal-title">新建任务</h3>
+      <label>标题 *<input id="f-title" class="input" required maxlength="200" placeholder="要做什么？"></label>
+      <label>备注<textarea id="f-note" class="input" rows="3" maxlength="2000" placeholder="补充细节（可选）"></textarea></label>
+      <div class="form-row">
+        <label>标签<input id="f-tag" class="input" maxlength="20" placeholder="工作 / 学习 / 生活…"></label>
+        <label>截止日期<input id="f-due" class="input" type="date"></label>
+      </div>
+      <fieldset class="q-choice">
+        <legend>所属象限</legend>
+        <div class="q-radio-grid">
+          <label><input type="radio" name="quadrant" value="1"><span>① 重要且紧急</span></label>
+          <label><input type="radio" name="quadrant" value="2" checked><span>② 重要不紧急</span></label>
+          <label><input type="radio" name="quadrant" value="3"><span>③ 紧急不重要</span></label>
+          <label><input type="radio" name="quadrant" value="4"><span>④ 不紧急不重要</span></label>
+        </div>
+      </fieldset>
+      <p id="task-form-error" class="form-error"></p>
+      <div class="modal-btns">
+        <button type="button" id="task-cancel" class="btn btn-ghost">取消</button>
+        <button type="submit" class="btn btn-primary" id="task-save">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/pomodoro.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

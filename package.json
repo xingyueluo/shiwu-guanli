@@ -1,0 +1,18 @@
+{
+  "name": "shiguang-tasks",
+  "version": "1.0.0",
+  "description": "拾光清单——日常事务管理平台（前后端分离：原生 SPA + Node/Express + SQLite）",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": ["todo", "task-manager", "pomodoro", "eisenhower-matrix"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

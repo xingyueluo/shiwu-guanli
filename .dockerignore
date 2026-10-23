@@ -1,0 +1,7 @@
+node_modules
+data
+.npm-cache
+.acl-recovery
+.dsh-meow
+.git
+*.md

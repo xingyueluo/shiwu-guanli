@@ -1,0 +1,16 @@
+# Render.com 免费部署蓝图（推送到 GitHub 后在 Render 一键 Import）
+services:
+  - type: web
+    name: shiguang-tasks
+    runtime: docker
+    plan: free
+    region: singapore          # 新加坡区，国内访问较快
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: JWT_SECRET        # 点 Build 前务必在 Render 控制台生成随机值填入
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+    disk:                      # SQLite 需要持久化磁盘
+      name: shiguang-data
+      mountPath: /app/data
