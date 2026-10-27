@@ -2,7 +2,7 @@
  * 前端 API 封装：统一携带 token、统一解析 { error } 报错
  */
 const API = (() => {
-  const TOKEN_KEY = 'shiguang_token';
+  const TOKEN_KEY = 'swgl_token';
   let token = localStorage.getItem(TOKEN_KEY) || '';
 
   function setToken(t) {

@@ -1,7 +1,7 @@
 # Render.com 免费部署蓝图（推送到 GitHub 后在 Render 一键 Import）
 services:
   - type: web
-    name: shiguang-tasks
+    name: shiwu-guanli
     runtime: docker
     plan: free
     region: singapore          # 新加坡区，国内访问较快
@@ -12,5 +12,5 @@ services:
       - key: NODE_ENV
         value: production
     disk:                      # SQLite 需要持久化磁盘
-      name: shiguang-data
+      name: shiwu-data
       mountPath: /app/data

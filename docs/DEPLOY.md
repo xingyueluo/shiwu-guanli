@@ -4,42 +4,49 @@
 
 ## 方案对比
 
-| 方案 | 费用 | 数据持久化 | 难度 |
-|---|---|---|---|
-| **Render（推荐）** | 免费 | 免费档磁盘 7 天未用会重置（答辩场景够用） | ★★ |
-| Railway | 每月 $5 赠金 | 同上 | ★★ |
-| 校园网/本机 + 内网穿透（cpolar/花生壳） | 免费 | 本地文件，完全持久 | ★★★ |
+| 方案 | 费用 | 需要信用卡 | 数据持久化 | 难度 |
+|---|---|---|---|---|
+| **Koyeb（当前使用）** | 免费 | ❌ 不需要 | 无磁盘，闲置会重置 | ★★ |
+| Render | 免费 | ⚠️ 需要（$1 预授权验证） | 付费档才有磁盘 | ★★ |
+| 校园网/本机 + 内网穿透（cpolar/花生壳） | 免费 | ❌ | 本地文件，完全持久 | ★★★ |
 
-> ⚠️ 免费档的共同限制：15 分钟无访问会休眠，冷启动约 30-60 秒。演示前先访问一次唤醒。
+> ⚠️ 免费档的共同限制：一段时间无访问会休眠，冷启动约 30-60 秒。演示前先访问一次唤醒。
 
-## Render 部署步骤（约 10 分钟）
+## Koyeb 部署步骤（约 8 分钟，当前方案）
 
-1. **把代码推上 GitHub**
+1. **把代码推上 GitHub**（已完成：仓库 `xingyueluo/shiwu-guanli`）
    ```bash
-   git init
    git add .
-   git commit -m "拾光清单 v1"
-   # 在 GitHub 新建仓库后：
-   git remote add origin https://github.com/<你的用户名>/shiguang-tasks.git
-   git push -u origin main
+   git commit -m "事务管理系统更新"
+   git push
    ```
 
-2. **注册 Render 并导入仓库**
-   - 打开 https://render.com → Sign Up（可用 GitHub 账号直接登录）
-   - New → Web Service → 选择刚才的仓库
-   - 它会自动读取仓库里的 `render.yaml`（Docker 构建 + /app/data 持久磁盘 + 随机 JWT_SECRET）
-   - Instance Type 选 **Free** → Create Web Service
+2. **注册并创建服务**
+   - 打开 https://app.koyeb.com → Sign Up → **Continue with GitHub** 授权登录
+   - Create → **Web Service**
+   - Source 选 **GitHub** → 仓库 `shiwu-guanli`，分支 `main`
+   - Build configuration 选 **Docker**（自动识别仓库里的 Dockerfile）
+   - Instance type 选 **Free**，Region 选带 Free 标记的（`sin` 新加坡国内较快）
+   - Environment variables 添加：`JWT_SECRET` = 任意随机长字符串
+   - 点 **Deploy**
 
-3. **等待构建完成**，得到形如
-   `https://shiguang-tasks.onrender.com` 的地址——这就是上线的网站首页。
+3. **等待构建**（2-4 分钟），状态变 **Running** 后
+   访问 `https://<服务名>.koyeb.app` —— 这就是上线的网站首页。
 
-4. **验证**：浏览器打开该地址，注册一个账号、建几个任务、跑一个番茄。
+4. **验证**：打开地址，注册账号、建任务、跑一个番茄。
+
+## Render 部署步骤（备用，需信用卡）
+
+1. https://render.com → Sign Up（GitHub 登录）→ New → Web Service → 选仓库
+2. 自动读取 `render.yaml`（Docker + 持久磁盘 + JWT_SECRET），Instance 选 Free
+3. **注意**：新用户需绑一张 Visa/Mastercard 做 $1 预授权验证（不扣费），没有国际卡则无法使用
+4. 构建 3-5 分钟变 Live，得到 `https://<服务名>.onrender.com`
 
 ## 常见问题
 
 - **构建失败 "npm install"**：确认推上去的代码不含 `node_modules`（.gitignore 已处理）。
-- **访问 502**：免费实例冷启动中，等 1 分钟刷新即可。
-- **数据哪去了**：免费档磁盘 7 天无活动会清空，属正常现象；答辩前一两天部署即可。
+- **访问 502/转圈**：免费实例冷启动中，等 1 分钟刷新即可。
+- **数据哪去了**：免费容器无持久磁盘，长期闲置会重置——答辩前一两天部署即可，重新部署就是干净环境。
 - **想要正式数据库**：可把 `db.js` 里的 `node:sqlite` 换成 Turso/Neon 的 HTTP 驱动——接口层已封装好 `all/get/run` 三个函数，改动集中在一处。
 
 ## 本地局域网演示（备用方案）

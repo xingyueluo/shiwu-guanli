@@ -64,7 +64,7 @@
     $('#app-view').classList.remove('hidden');
     $('#side-user').textContent = me.username;
     $('#side-avatar').textContent = me.username[0].toUpperCase();
-    switchView(localStorage.getItem('shiguang_view') || 'today');
+    switchView(localStorage.getItem('swgl_view') || 'today');
     await refreshAll();
   }
 
@@ -80,7 +80,7 @@
     $$('.nav-item').forEach((b) => b.classList.toggle('active', b.dataset.view === name));
     $$('.view').forEach((v) => v.classList.add('hidden'));
     $(`#view-${name}`).classList.remove('hidden');
-    localStorage.setItem('shiguang_view', name);
+    localStorage.setItem('swgl_view', name);
     if (name === 'stats') loadStats();
     if (name === 'pomodoro') loadPomoSide();
   }

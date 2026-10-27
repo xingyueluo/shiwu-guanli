@@ -1,5 +1,5 @@
 /**
- * 拾光清单 · 后端入口
+ * 事务管理系统 · 后端入口
  * 前后端分离：本进程只做两件事 ——
  *   1) 提供 REST API（/api/*）
  *   2) 托管前端静态文件（public/，生产环境下由同一进程或 CDN 提供）
@@ -62,4 +62,4 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, () => console.log(`拾光清单已启动: http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`事务管理系统已启动: http://localhost:${PORT}`));

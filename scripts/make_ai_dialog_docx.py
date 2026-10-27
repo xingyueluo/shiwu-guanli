@@ -71,7 +71,7 @@ def table(headers, rows, widths=None):
 
 # ================= 封面标题 =================
 para('与 AI 的对话记录整理', bold=True, color=DARK, size=22, align=WD_ALIGN_PARAGRAPH.CENTER)
-para('拾光清单——日常事务管理平台 · Web 开发技术期末项目（单人）',
+para('事务管理系统 · Web 开发技术期末项目（单人）',
      color=MUTED, size=11, align=WD_ALIGN_PARAGRAPH.CENTER)
 para('工具：DeepSeek Harness 编程助手（对话式 AI 结对开发）',
      color=MUTED, size=10, align=WD_ALIGN_PARAGRAPH.CENTER)

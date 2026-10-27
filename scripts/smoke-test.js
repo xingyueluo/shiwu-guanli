@@ -1,9 +1,9 @@
 /**
  * API 冒烟测试：注册→登录→建任务→改象限→完成→番茄记录→统计
- * 运行：node scripts/smoke-test.js   （需服务器已在 3000 端口启动）
+ * 运行：node scripts/smoke-test.js   （需服务器已在 3000 端口启动；BASE_URL 环境变量可覆盖地址）
  */
 'use strict';
-const BASE = 'http://localhost:3000/api';
+const BASE = (process.env.BASE_URL || 'http://localhost:3000') + '/api';
 let token = '';
 
 async function call(method, path, body) {

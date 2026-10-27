@@ -1,7 +1,7 @@
 {
-  "name": "shiguang-tasks",
+  "name": "shiwu-guanli",
   "version": "1.0.0",
-  "description": "拾光清单——日常事务管理平台（前后端分离：原生 SPA + Node/Express + SQLite）",
+  "description": "事务管理系统（前后端分离：原生 SPA + Node/Express + SQLite）",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
