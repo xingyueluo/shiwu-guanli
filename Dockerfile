@@ -11,7 +11,8 @@ COPY server ./server
 COPY public ./public
 
 # SQLite 数据落在 /app/data，云平台可挂载持久卷
-ENV PORT=3000
-EXPOSE 3000
+# 7860 = Hugging Face Spaces 要求的应用端口（Render/Koyeb 会通过 PORT 环境变量覆盖）
+ENV PORT=7860
+EXPOSE 7860
 
 CMD ["node", "server/index.js"]

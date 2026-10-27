@@ -1,3 +1,13 @@
+---
+title: 事务管理系统
+emoji: 🗂️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # 🗂️ 事务管理系统
 
 > Web 开发技术 · 期末项目（单人项目，贡献度 100%）
